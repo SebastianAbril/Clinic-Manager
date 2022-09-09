@@ -1,9 +1,8 @@
 package com.sebastianabril.clinicmanager.clinicmanagerapi.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.annotations.Cascade;
+
+import javax.persistence.*;
 
 @Entity
 public class Patient {
@@ -13,7 +12,9 @@ public class Patient {
     private String name;
     private String lastName;
     private String document;
-    private Long documentTypeId;
+
+    @OneToOne
+    private DocumentType documentType;
 
     public Long getId() {
         return id;
@@ -47,11 +48,11 @@ public class Patient {
         this.document = document;
     }
 
-    public Long getDocumentTypeId() {
-        return documentTypeId;
+    public DocumentType getDocumentType() {
+        return documentType;
     }
 
-    public void setDocumentTypeId(Long documentTypeId) {
-        this.documentTypeId = documentTypeId;
+    public void setDocumentType(DocumentType documentType) {
+        this.documentType = documentType;
     }
 }

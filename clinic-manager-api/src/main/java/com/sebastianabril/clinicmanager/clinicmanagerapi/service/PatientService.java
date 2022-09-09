@@ -20,7 +20,7 @@ public class PatientService {
     private DocumentTypeService documentTypeService;
 
     public List<Patient> getPatients(){
-        return patientRepository.findAll();
+        return patientRepository.findByOrderByIdAsc();
     }
 
     public void createPatient(String name, String lastName, String document, Long documentTypeId){
@@ -35,7 +35,7 @@ public class PatientService {
         patient.setName(name);
         patient.setLastName(lastName);
         patient.setDocument(document);
-        patient.setDocumentTypeId(documentTypeId);
+        patient.setDocumentType(documentType.get());
 
         patientRepository.save(patient);
     }
@@ -48,5 +48,29 @@ public class PatientService {
         } else {
             return ("Patient's Id did not found");
         }
+    }
+
+
+    public void updatePatient(Long id, String name, String lastName, String document, Long documentTypeId){
+
+        Optional<DocumentType> documentType = documentTypeService.getDocumentTypeById(documentTypeId);
+
+        if(documentType.isEmpty()){
+            throw new RuntimeException("Invalid document type Id");
+        }
+
+        Optional<Patient> optionalPatient = patientRepository.findById(id);
+        if(optionalPatient.isEmpty()){
+            throw new RuntimeException("The Patient does not exist.");
+        }
+
+
+        Patient patient = optionalPatient.get();
+        patient.setName(name);
+        patient.setLastName(lastName);
+        patient.setDocument(document);
+        patient.setDocumentType(documentType.get());
+
+        patientRepository.save(patient);
     }
 }
